@@ -8,12 +8,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/Mrs4s/MiraiGo/client/internal/network"
-	"github.com/Mrs4s/MiraiGo/client/pb/channel"
-	"github.com/Mrs4s/MiraiGo/client/pb/cmd0x388"
-	"github.com/Mrs4s/MiraiGo/client/pb/msg"
-	"github.com/Mrs4s/MiraiGo/internal/proto"
-	"github.com/Mrs4s/MiraiGo/message"
+	"github.com/Sclock/MiraiGo/client/internal/network"
+	"github.com/Sclock/MiraiGo/client/pb/channel"
+	"github.com/Sclock/MiraiGo/client/pb/cmd0x388"
+	"github.com/Sclock/MiraiGo/client/pb/msg"
+	"github.com/Sclock/MiraiGo/internal/proto"
+	"github.com/Sclock/MiraiGo/message"
 )
 
 func init() {

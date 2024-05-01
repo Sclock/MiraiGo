@@ -8,9 +8,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/Mrs4s/MiraiGo/client/pb/web"
-	"github.com/Mrs4s/MiraiGo/internal/proto"
-	"github.com/Mrs4s/MiraiGo/utils"
+	"github.com/Sclock/MiraiGo/client/pb/web"
+	"github.com/Sclock/MiraiGo/internal/proto"
+	"github.com/Sclock/MiraiGo/utils"
 )
 
 type UnidirectionalFriendInfo struct {

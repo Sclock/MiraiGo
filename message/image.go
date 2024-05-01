@@ -3,8 +3,8 @@ package message
 import (
 	"fmt"
 
-	"github.com/Mrs4s/MiraiGo/client/pb/msg"
-	"github.com/Mrs4s/MiraiGo/internal/proto"
+	"github.com/Sclock/MiraiGo/client/pb/msg"
+	"github.com/Sclock/MiraiGo/internal/proto"
 )
 
 /* -------- Definitions -------- */
