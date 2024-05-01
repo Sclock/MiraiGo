@@ -80,22 +80,32 @@ func (c *QQClient) c2cMessageSyncProcessor(rsp *msg.GetMessageResponse, info net
 func (c *QQClient) commMsgProcessor(pMsg *msg.Message, info network.RequestParams) {
 	strKey := fmt.Sprintf("%d%d%d%d", pMsg.Head.FromUin.Unwrap(), pMsg.Head.ToUin.Unwrap(), pMsg.Head.MsgSeq.Unwrap(), pMsg.Head.MsgUid.Unwrap())
 	if _, ok := c.msgSvcCache.GetAndUpdate(strKey, time.Hour); ok {
-		c.debug("c2c msg %v already exists in cache. skip.", pMsg.Head.MsgUid.Unwrap())
+		c.debug("c2c消息错误！ 消息：%v 已在缓存中，忽略", pMsg.Head.MsgUid.Unwrap())
 		return
 	}
 	c.msgSvcCache.Add(strKey, unit{}, time.Hour)
-	if c.lastC2CMsgTime > int64(pMsg.Head.MsgTime.Unwrap()) && (c.lastC2CMsgTime-int64(pMsg.Head.MsgTime.Unwrap())) > 60*10 {
-		c.debug("c2c msg filtered by time. lastMsgTime: %v  msgTime: %v", c.lastC2CMsgTime, pMsg.Head.MsgTime.Unwrap())
+
+	MsgType := pMsg.Head.MsgType.Unwrap()
+	NowMsgTime := int64(pMsg.Head.MsgTime.Unwrap())
+
+	if MsgType == 528 {
+		c.debug("c2c消息错误！ 丢弃528 - %v号消息 时间戳偏移: %v", pMsg.Head.C2CCmd.Unwrap(), c.lastC2CMsgTime-NowMsgTime)
 		return
 	}
-	c.lastC2CMsgTime = int64(pMsg.Head.MsgTime.Unwrap())
+
+	if c.lastC2CMsgTime > NowMsgTime && (c.lastC2CMsgTime-NowMsgTime) > 60*10 {
+		c.info("c2c消息超时但未处理！ 消息时间: lastMsgTime: %v  msgTime: %v 差值: %v", c.lastC2CMsgTime, NowMsgTime, c.lastC2CMsgTime-NowMsgTime)
+		//return
+	}
+
+	c.lastC2CMsgTime = NowMsgTime
 	if info.Bool("init") {
 		return
 	}
-	if decoder, _ := peekC2CDecoder(pMsg.Head.MsgType.Unwrap()); decoder != nil {
+	if decoder, _ := peekC2CDecoder(MsgType); decoder != nil {
 		decoder(c, pMsg, info)
 	} else {
-		c.debug("unknown msg type on c2c processor: %v - %v", pMsg.Head.MsgType.Unwrap(), pMsg.Head.C2CCmd.Unwrap())
+		c.warning("c2c消息错误！未知的消息类型 MsgType: %v C2CCmd: %v", MsgType, pMsg.Head.C2CCmd.Unwrap())
 	}
 }
 
