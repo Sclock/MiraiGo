@@ -126,6 +126,8 @@ func (s *TempSessionInfo) SendMessage(m *message.SendingMessage) (*message.TempM
 		return s.client.SendGroupTempMessage(s.GroupCode, s.Sender, m), nil
 	case ConsultingSource:
 		return s.client.sendWPATempMessage(s.Sender, s.sig, m), nil
+	case QidianTempSource: // 企点消息处理
+		return s.client.sendWPATempMessage(s.Sender, s.sig, m), nil
 	default:
 		return nil, errors.New("unsupported message source")
 	}

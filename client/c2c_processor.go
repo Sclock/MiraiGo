@@ -37,6 +37,7 @@ const (
 	MultiChatSource                              // 来自多人聊天
 	DateSource                                   // 来自约会
 	AddressBookSource                            // 来自通讯录
+	QidianTempSource                             // 来自企点
 )
 
 func (c *QQClient) c2cMessageSyncProcessor(rsp *msg.GetMessageResponse, info network.RequestParams) {
